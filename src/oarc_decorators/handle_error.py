@@ -2,6 +2,7 @@
 
 import functools
 import traceback
+import sys  # Import sys
 from typing import Any, Dict, Callable
 
 import click
@@ -101,31 +102,36 @@ def handle_error(func: Callable) -> Callable:
     """Decorator to wrap a Click command and handle exceptions.
     
     This decorator will catch any exceptions raised by the command,
-    handle them appropriately, and return a suitable exit code.
+    handle them appropriately, and exit with a suitable exit code using sys.exit().
     
     Args:
         func: The function to decorate
         
     Returns:
-        A wrapped function that handles errors
+        A wrapped function that handles errors and exits.
     """
     @functools.wraps(func)
     def wrapped(*args, **kwargs):
         verbose = kwargs.get('verbose', False)
         try:
-            return func(*args, **kwargs)
+            # Execute the original function. If it returns a value,
+            # we might want to handle it or assume Click commands often don't
+            # return meaningful values on success (or return 0).
+            return func(*args, **kwargs) 
         except click.exceptions.UsageError as e:
             # Handle command not found errors cleanly
             if "No such command" in str(e):
                 command_name = str(e).split("'")[1] if "'" in str(e) else "unknown"
                 click.echo(f"Error: Command '{command_name}' not found", err=True)
-                return 2  # Standard CLI error code
+                sys.exit(2)  # Use sys.exit
             else:
                 # For other usage errors, still show them but without traceback
                 click.echo(f"Error: {str(e)}", err=True)
-                return 2
+                sys.exit(2)  # Use sys.exit
         except Exception as e:
-            return report_error(e, verbose)
+            # report_error now returns the exit code, which we pass to sys.exit
+            exit_code = report_error(e, verbose) 
+            sys.exit(exit_code)  # Use sys.exit
     return wrapped
 
 

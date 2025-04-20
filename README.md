@@ -208,9 +208,23 @@ uv venv --python 3.11
 
 # Install in editable mode with development dependencies
 uv pip install -e ".[dev]"
+```
 
-# Run tests (example)
-# uv run pytest tests/
+### Running Tests
+
+Tests are written using `pytest`. Ensure you have installed the development dependencies (`.[dev]`).
+
+To run the test suite:
+
+```bash
+# Ensure your virtual environment is activated
+uv run pytest
+```
+
+To run tests with coverage:
+
+```bash
+uv run pytest --cov=src/oarc_decorators --cov-report=term-missing
 ```
 
 ## Project Structure
