@@ -1,4 +1,4 @@
-# oarc-decorators
+# oarc-utils
 
 A global repository of useful Python decorators and custom error classes for the Ollama Agent Roll Cage (OARC) ecosystem. This package provides reusable components to streamline development across various OARC projects.
 
