@@ -1,67 +1,13 @@
 """Defines exception classes, error handling utilities, and a decorator for consistent and user-friendly error reporting in OARC Crawlers."""
 
+import sys
 import functools
 import traceback
-import sys  # Import sys
 from typing import Any, Dict, Callable
 
 import click
 
-
-# Base exception classes
-class OarcError(Exception):
-    """Base exception for all OARC Crawler errors."""
-    exit_code = 1
-
-
-class AuthenticationError(OarcError):
-    """Raised when authentication fails."""
-    exit_code = 4
-
-
-class BuildError(OarcError):
-    """Raised during package build operations."""
-    exit_code = 7
-
-
-class ConfigurationError(OarcError):
-    """Raised when there's a problem with configuration."""
-    exit_code = 9
-
-
-class CrawlerOpError(OarcError):
-    """Raised when a crawler operation fails."""
-    exit_code = 6
-
-
-class DataExtractionError(OarcError):
-    """Raised when data extraction fails."""
-    exit_code = 5
-
-
-class MCPError(Exception):
-    """Base error for MCP operations."""
-    pass
-
-
-class NetworkError(OarcError):
-    """Raised when network operations fail."""
-    exit_code = 2
-
-
-class PublishError(OarcError):
-    """Raised during package publishing operations."""
-    exit_code = 8
-
-
-class ResourceNotFoundError(OarcError):
-    """Raised when a requested resource is not found."""
-    exit_code = 3
-
-
-class TransportError(MCPError):
-    """Error for transport-related issues."""
-    pass
+from oarc_utils.errors import OARCError
 
 
 def get_error(error: Exception, verbose: bool = False) -> Dict[str, Any]:
@@ -77,7 +23,7 @@ def get_error(error: Exception, verbose: bool = False) -> Dict[str, Any]:
     # Get error details
     error_type = type(error).__name__
     error_message = str(error)
-    exit_code = getattr(error, 'exit_code', 1) if isinstance(error, OarcError) else 1
+    exit_code = getattr(error, 'exit_code', 1) if isinstance(error, OARCError) else 1
     
     # Only log in verbose mode - the report method will handle user output
     if verbose:
@@ -148,7 +94,7 @@ def report_error(error: Exception, verbose: bool = False) -> int:
     result = get_error(error, verbose)
     
     # Create a visually distinct error message for users
-    if isinstance(error, OarcError):
+    if isinstance(error, OARCError):
         # For expected errors, display a concise message
         click.secho("╔═══════════════════════════════╗", fg="red")
         click.secho("║           ERROR               ║", fg="red", bold=True)

@@ -1,6 +1,5 @@
 import pytest
-from oarc_decorators import singleton
-import click # Used by singleton for warnings
+from oarc_utils.decorators import singleton
 
 # --- Test Classes ---
 

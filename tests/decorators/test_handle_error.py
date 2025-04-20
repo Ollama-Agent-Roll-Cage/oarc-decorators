@@ -2,28 +2,27 @@ import pytest
 import click
 from click.testing import CliRunner
 
-from oarc_decorators import (
-    handle_error,
-    OarcError,
+from oarc_utils.decorators import handle_error, get_error
+from oarc_utils.errors import (
+    OARCError,
     AuthenticationError,
     BuildError,
     ConfigurationError,
     CrawlerOpError,
     DataExtractionError,
-    MCPError, # Note: Not an OarcError subclass
     NetworkError,
     PublishError,
     ResourceNotFoundError,
-    TransportError # Note: Not an OarcError subclass
+    TransportError, # Note: Not an OARCError subclass
+    MCPError,       # Note: Not an OARCError subclass
 )
-# Import internal functions for direct testing if needed, though decorator tests cover them
-from oarc_decorators.handle_error import get_error, report_error 
+
 
 # --- Test Click Commands ---
 
 # Define all OarcError subclasses to test
 OARC_ERRORS_TO_TEST = {
-    'oarc_error': (OarcError, "Generic OARC error."),
+    'oarc_error': (OARCError, "Generic OARC error."),
     'auth_error': (AuthenticationError, "Authentication failed."),
     'build_error': (BuildError, "Build process failed."),
     'config_error': (ConfigurationError, "Invalid configuration."),
@@ -46,7 +45,7 @@ command_modes = ['success', 'unexpected', 'usage_error', 'transport_error'] + li
 def command_under_test(mode, verbose):
     """A command function wrapped by handle_error for testing."""
     click.echo(f"Executing mode: {mode}, Verbose: {verbose}")
-    
+
     if mode == 'success':
         click.echo("Success message")
         return 0 # Explicit success code
@@ -59,9 +58,9 @@ def command_under_test(mode, verbose):
     elif mode in OARC_ERRORS_TO_TEST:
         error_cls, error_msg = OARC_ERRORS_TO_TEST[mode]
         raise error_cls(error_msg)
-    
+
     # Should not be reached in error modes
-    return 99 
+    return 99
 
 # --- Pytest Fixtures ---
 
@@ -85,9 +84,9 @@ def test_handle_error_all_oarc_subclasses(runner, mode):
     """Test handling of all defined OarcError subclasses."""
     error_cls, expected_msg = OARC_ERRORS_TO_TEST[mode]
     expected_code = getattr(error_cls, 'exit_code', 1) # Get code from class or default
-    
+
     result = runner.invoke(command_under_test, [f'--mode={mode}'])
-    
+
     assert result.exit_code == expected_code
     assert "Executing mode:" in result.output # Check it started execution
     assert "ERROR" in result.output # Check the error box title
@@ -115,7 +114,7 @@ def test_handle_error_unexpected_exception_verbose(runner):
 def test_handle_error_oarc_error_verbose(runner):
     """Test handling of OarcError with verbose=True."""
     # Use one specific error for the verbose test
-    mode = 'config_error' 
+    mode = 'config_error'
     error_cls, expected_msg = OARC_ERRORS_TO_TEST[mode]
     expected_code = getattr(error_cls, 'exit_code', 1)
 
@@ -125,8 +124,8 @@ def test_handle_error_oarc_error_verbose(runner):
     assert "ERROR" in result.output
     assert f"➤ {expected_msg}" in result.output
     # Traceback should be printed by get_error via click.secho in verbose mode
-    assert "Traceback (most recent call last):" in result.output 
-    assert f"oarc_decorators.handle_error.{error_cls.__name__}: {expected_msg}" in result.output
+    assert "Traceback (most recent call last):" in result.output
+    assert f"oarc_utils.errors.oarc_crawlers_errors.{error_cls.__name__}: {expected_msg}" in result.output
 
 def test_handle_error_transport_error(runner):
     """Test handling of TransportError (which is not an OarcError)."""
@@ -145,7 +144,7 @@ def test_handle_error_transport_error_verbose(runner):
     assert "UNEXPECTED ERROR" in result.output
     assert "➤ TransportError: MCP transport failed." in result.output
     assert "Traceback (most recent call last):" in result.output # Check for traceback
-    assert "oarc_decorators.handle_error.TransportError: MCP transport failed." in result.output
+    assert "oarc_utils.errors.oarc_crawlers_errors.TransportError: MCP transport failed." in result.output
 
 def test_handle_error_click_usage_error(runner):
     """Test handling of Click UsageError (simulated)."""
@@ -169,12 +168,12 @@ def test_handle_error_click_no_such_command(runner):
     try:
         ctx = cli_group.make_context(info_name='cli', args=['nonexistent'])
         with ctx:
-            pass 
+            pass
     except click.exceptions.UsageError as e:
         @handle_error
         def dummy_func():
             raise e
-        
+
         exit_code = dummy_func()
         assert exit_code == 2
         assert "No such command 'nonexistent'" in str(e)
@@ -218,6 +217,7 @@ def test_get_error_structure():
         "exit_code": 1 # Default exit code
     }
 
+
 def test_get_error_verbose_includes_traceback():
     """Test get_error includes traceback when verbose=True."""
     try:
@@ -227,5 +227,5 @@ def test_get_error_verbose_includes_traceback():
         assert result["exit_code"] == 7
         assert "traceback" in result
         assert "Traceback (most recent call last):" in result["traceback"]
-        assert "oarc_decorators.handle_error.BuildError: Compilation failed" in result["traceback"]
-
+        assert "oarc_utils.errors.oarc_crawlers_errors.BuildError: Compilation failed" in result[
+            "traceback"]

@@ -1,14 +1,14 @@
 """
-oarc_decorators
+oarc_utils.errors
 
-This module provides global decorators and error classes for use throughout the project.
+This module defines custom exception classes for the OARC Crawler project.
+All error classes inherit from the base `OarcError`, providing a unified interface for error handling
+across the project. These exceptions cover authentication, configuration, network, data extraction,
+and other crawler-related error scenarios.
 """
 
-from .asyncio_run import asyncio_run
-from .factory import factory
-from .handle_error import (
-    handle_error,
-    OarcError,
+from .oarc_crawlers_errors import (
+    OARCError,
     AuthenticationError,
     BuildError,
     ConfigurationError,
@@ -20,16 +20,9 @@ from .handle_error import (
     ResourceNotFoundError,
     TransportError,
 )
-from .singleton import singleton
 
 __all__ = [
-    # Decorators
-    "singleton",
-    "asyncio_run",
-    "handle_error",
-    "factory",
-    # Error Classes
-    "OarcError",
+    "OARCError",
     "AuthenticationError",
     "BuildError",
     "ConfigurationError",

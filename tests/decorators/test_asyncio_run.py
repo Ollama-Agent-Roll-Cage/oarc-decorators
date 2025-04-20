@@ -1,6 +1,6 @@
 import asyncio
 import pytest
-from oarc_decorators import asyncio_run
+from oarc_utils.decorators import asyncio_run
 
 async def simple_async_func():
     """A simple async function for testing."""
@@ -52,7 +52,7 @@ def test_asyncio_run_with_args(decorated_with_args):
     """Verify arguments are passed correctly."""
     result1 = decorated_with_args("test_arg")
     assert result1 == "test_arg-default"
-    
+
     result2 = decorated_with_args("arg1_val", kwarg1="kwarg_val")
     assert result2 == "arg1_val-kwarg_val"
 
@@ -65,6 +65,7 @@ def test_asyncio_run_propagates_exception(decorated_raises):
 # Test decorator preserves function metadata (basic check)
 def test_asyncio_run_preserves_metadata():
     """Check if functools.wraps is working."""
+
     @asyncio_run
     async def original_func_for_meta():
         """Docstring for original."""
@@ -72,4 +73,3 @@ def test_asyncio_run_preserves_metadata():
 
     assert original_func_for_meta.__name__ == "original_func_for_meta"
     assert "Docstring for original" in original_func_for_meta.__doc__
-

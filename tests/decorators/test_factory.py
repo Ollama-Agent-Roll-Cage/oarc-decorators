@@ -1,5 +1,5 @@
 import pytest
-from oarc_decorators import factory
+from oarc_utils.decorators import factory
 from typing import List, Optional
 
 # --- Test Classes ---
