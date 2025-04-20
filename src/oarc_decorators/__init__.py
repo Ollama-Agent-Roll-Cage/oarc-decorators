@@ -1,8 +1,13 @@
-"""Global decorators and error classes for the project"""
+"""
+oarc_decorators
+
+This module provides global decorators and error classes for use throughout the project.
+"""
+
 from .asyncio_run import asyncio_run
+from .factory import factory
 from .handle_error import (
     handle_error,
-    # Import error classes
     OarcError,
     AuthenticationError,
     BuildError,
@@ -13,10 +18,9 @@ from .handle_error import (
     NetworkError,
     PublishError,
     ResourceNotFoundError,
-    TransportError
+    TransportError,
 )
 from .singleton import singleton
-from .factory import factory
 
 __all__ = [
     # Decorators
@@ -35,5 +39,5 @@ __all__ = [
     "NetworkError",
     "PublishError",
     "ResourceNotFoundError",
-    "TransportError"
+    "TransportError",
 ]
