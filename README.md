@@ -1,4 +1,6 @@
-# oarc-utils
+[![Python package](https://github.com/Ollama-Agent-Roll-Cage/oarc-utils/actions/workflows/python-package.yml/badge.svg)](https://github.com/Ollama-Agent-Roll-Cage/oarc-utils/actions/workflows/python-package.yml)
+
+# OARC-Utils
 
 A global repository of useful Python decorators and custom error classes for the Ollama Agent Roll Cage (OARC) ecosystem. This package provides reusable components to streamline development across various OARC projects.
 
