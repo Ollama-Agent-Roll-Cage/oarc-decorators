@@ -11,7 +11,7 @@ and explicit instance retrieval.
 Features:
 - Guarantees a single instance per decorated class.
 - Tracks initialization arguments and warns if subsequent calls differ.
-- Provides `get_instance()` and `_reset_singleton()` class methods for
+- Provides `get_instance()` and `reset_singleton()` class methods for
     explicit instance management and testing.
 - Uses informative logging via `click.secho` for warnings and diagnostics.
 """
@@ -121,7 +121,7 @@ def singleton(cls: Type[T]) -> Type[T]:
     
 
     # Add a custom reset method for testing and cleanup
-    def _reset_singleton(cls):
+    def reset_singleton(cls):
         """
         Remove the singleton instance, allowing a new one to be created.
 
@@ -130,7 +130,7 @@ def singleton(cls: Type[T]) -> Type[T]:
         if cls in _instances:
             del _instances[cls]
     
-    cls._reset_singleton = classmethod(_reset_singleton)
+    cls.reset_singleton = classmethod(reset_singleton)
     
     # Add get_instance classmethod to explicitly get the singleton instance
     @classmethod

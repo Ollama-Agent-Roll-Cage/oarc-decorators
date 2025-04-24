@@ -19,7 +19,7 @@ Transforms a class into a Singleton, ensuring that only one instance of the clas
 3.  **Parameter Mismatch Warning:** If subsequent instantiations provide different arguments to `__init__` compared to the first instantiation, a warning message detailing the differences is printed to the console using `click.secho` (yellow text). The original instance is still returned, and the new `__init__` call is effectively skipped.
 4.  **Added Class Methods:**
     *   `get_instance()`: A class method to explicitly retrieve the singleton instance. If the instance hasn't been created yet, it calls the constructor with no arguments (`cls()`).
-    *   `_reset_singleton()`: A class method primarily for testing purposes. It removes the stored singleton instance, allowing the next instantiation to create a new one.
+    *   `reset_singleton()`: A class method primarily for testing purposes. It removes the stored singleton instance, allowing the next instantiation to create a new one.
 
 **Arguments:**
 -   `cls` (`Type[T]`): The class to be decorated.
@@ -57,7 +57,7 @@ print(f"Conn3 URL: {conn3.db_url}") # Output: Conn3 URL: postgresql://user:pass@
 assert conn1 is conn2 is conn3
 
 # Reset for testing
-DatabaseConnector._reset_singleton()
+DatabaseConnector.reset_singleton()
 conn4 = DatabaseConnector("new_default_url") # Now creates a new instance
 # Output: Initializing DatabaseConnector with URL: new_default_url
 print(f"Conn4 URL: {conn4.db_url}") # Output: Conn4 URL: new_default_url

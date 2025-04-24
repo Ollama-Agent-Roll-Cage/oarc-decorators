@@ -31,22 +31,22 @@ class SingletonWithOnlyKwargs:
 def reset_singletons():
     """Automatically reset singletons before and after each test."""
     # Before test
-    if hasattr(SimpleSingleton, '_reset_singleton'):
-        SimpleSingleton._reset_singleton()
-    if hasattr(SingletonWithArgs, '_reset_singleton'):
-        SingletonWithArgs._reset_singleton()
-    if hasattr(SingletonWithOnlyKwargs, '_reset_singleton'):
-        SingletonWithOnlyKwargs._reset_singleton()
+    if hasattr(SimpleSingleton, 'reset_singleton'):
+        SimpleSingleton.reset_singleton()
+    if hasattr(SingletonWithArgs, 'reset_singleton'):
+        SingletonWithArgs.reset_singleton()
+    if hasattr(SingletonWithOnlyKwargs, 'reset_singleton'):
+        SingletonWithOnlyKwargs.reset_singleton()
     
     yield # Run the test
 
     # After test
-    if hasattr(SimpleSingleton, '_reset_singleton'):
-        SimpleSingleton._reset_singleton()
-    if hasattr(SingletonWithArgs, '_reset_singleton'):
-        SingletonWithArgs._reset_singleton()
-    if hasattr(SingletonWithOnlyKwargs, '_reset_singleton'):
-        SingletonWithOnlyKwargs._reset_singleton()
+    if hasattr(SimpleSingleton, 'reset_singleton'):
+        SimpleSingleton.reset_singleton()
+    if hasattr(SingletonWithArgs, 'reset_singleton'):
+        SingletonWithArgs.reset_singleton()
+    if hasattr(SingletonWithOnlyKwargs, 'reset_singleton'):
+        SingletonWithOnlyKwargs.reset_singleton()
 
 # --- Tests ---
 
@@ -136,9 +136,9 @@ def test_singleton_warning_on_different_kwargs_only(capsys):
     assert instance1.setting == "B" # Original setting preserved
 
 def test_singleton_reset_method():
-    """Test the _reset_singleton class method."""
+    """Test the reset_singleton class method."""
     instance1 = SimpleSingleton()
-    SimpleSingleton._reset_singleton()
+    SimpleSingleton.reset_singleton()
     instance2 = SimpleSingleton()
     
     assert instance1 is not instance2

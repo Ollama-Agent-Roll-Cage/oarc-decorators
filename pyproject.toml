@@ -1,15 +1,39 @@
+[build-system]
+requires = ["setuptools>=42", "wheel", "build", "uv", "pip"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "oarc-utils"
-version = "0.1.0"
+version = "0.1.1"
 description = "A global repository of useful python utility scripts and decorators for Ollama Agent Roll Cage (OARC)"
 readme = "README.md"
-requires-python = ">=3.10, <3.12"
+requires-python = ">=3.10"
+license = "Apache-2.0"
 authors = [
     {name = "OARC Team"}
+]
+keywords = ["ollama", "agent", "utilities", "decorators", "cli", "python"]
+maintainers = [
+    {name = "OARC Team", email = "NotSetup@gmail.com"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
     "click>=8.1.8",
 ]
+
+[project.urls]
+homepage = "https://github.com/Ollama-Agent-Roll-Cage/oarc-utils"
+repository = "https://github.com/Ollama-Agent-Roll-Cage/oarc-utils"
+documentation = "https://github.com/Ollama-Agent-Roll-Cage/oarc-utils#readme"
+bugtracker = "https://github.com/Ollama-Agent-Roll-Cage/oarc-utils/issues"
 
 [project.optional-dependencies]
 dev = [

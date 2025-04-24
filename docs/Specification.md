@@ -62,7 +62,7 @@ def process_data(config, verbose):
 
 ### `@singleton`
 
-**Purpose:** Ensures that only one instance of a class is ever created using the Singleton pattern. It modifies the class's `__new__` and `__init__` methods. It warns via `click.secho` if subsequent instantiations attempt to use different `__init__` arguments. Adds `get_instance()` and `_reset_singleton()` class methods.
+**Purpose:** Ensures that only one instance of a class is ever created using the Singleton pattern. It modifies the class's `__new__` and `__init__` methods. It warns via `click.secho` if subsequent instantiations attempt to use different `__init__` arguments. Adds `get_instance()` and `reset_singleton()` class methods.
 
 **Signature:** `singleton(cls: Type[T]) -> Type[T]`
 
@@ -81,7 +81,7 @@ s2 = Settings(setting_a="new_value") # Warns, returns s1
 s3 = Settings.get_instance() # Returns s1
 
 assert s1 is s2 is s3
-Settings._reset_singleton() # Clears instance for testing
+Settings.reset_singleton() # Clears instance for testing
 s4 = Settings() # Re-initializes
 ```
 

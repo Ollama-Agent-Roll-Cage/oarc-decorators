@@ -66,7 +66,7 @@ instance = SettingsManager.get_instance()
 assert instance is settings1
 
 # Reset for testing (if needed)
-SettingsManager._reset_singleton() 
+SettingsManager.reset_singleton() 
 ```
 
 ### Asyncio Run Decorator (`@asyncio_run`)
